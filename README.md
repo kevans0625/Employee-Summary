@@ -4,9 +4,11 @@ This app uses the Github API to retrieve empolyee information and display it in 
 
 ## User Story 
 
-As a web developer manager
+```
+As a manager
 I want to generate a webpage that displays my team's basic info
 so that I have quick access to emails and GitHub profiles
+```
 
 ## Installation
 
