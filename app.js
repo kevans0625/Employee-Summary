@@ -100,17 +100,17 @@ function formTeam() {
             {
                 type: "input",
                 message: "Please enter the manager's name.",
-                name: "manager-name",
+                name: "name",
             },
             {
                 type: "input",
                 message: "Please enter the manager's id.",
-                name: "manager-id",
+                name: "id",
             },
             {
                 type: "input",
                 message: "Please enter the manager's office number.",
-                name: "manager-office",
+                name: "office",
             },
             {
                 type: "list",
@@ -125,7 +125,7 @@ function formTeam() {
         ]).then(manager => {
             console.log(manager);
 
-            var managers = new Manager(manager.name, team.length + 1, manager.email, manager.github);
+            var managers = new Manager(manager.name, manager.id, manager.email, manager.office);
 
             team.push(managers);
             //based on their response switch between grabbing another employees info and generating the html. 
@@ -140,7 +140,118 @@ function formTeam() {
         })
         
 
+    }
+    // get Engineer info
+    function promptEngineer() {
+        // * Name
+
+        //     * Role
+
+        //     * ID
+
+        //     * Role - specific property
+
+        return inquirer.prompt([
+            {
+                type: "input",
+                message: "Please enter the engineer's name.",
+                name: "name",
+            },
+            {
+                type: "input",
+                message: "Please enter the engineer's id.",
+                name: "id",
+            },
+            {
+                type: "input",
+                message: "Please enter the engineer's Github usersname.",
+                name: "github",
+            },
+            {
+                type: "list",
+                message: "Would you like to add another teammate",
+                name: "teammate",
+                choices: [
+                    "Yes",
+                    "No",
+                ]
+
+            },
+        ]).then(engineer => {
+            console.log(engineer);
+
+            var engineers = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
+
+            team.push(engineers);
+            //based on their response switch between grabbing another employees info and generating the html. 
+            switch (engineer.teammate) {
+
+                case "Yes":
+                    return promptMember(engineer.type);
+
+                default:
+                    return generateHTML();
+            }
+        })
+
     };
+    // get intern info
+    function promptIntern() {
+        // * Name
+
+        //     * Role
+
+        //     * ID
+
+        //     * Role - specific property
+
+        return inquirer.prompt([
+            {
+                type: "input",
+                message: "Please enter the intern's name.",
+                name: "name",
+            },
+            {
+                type: "input",
+                message: "Please enter the intern's id.",
+                name: "id",
+            },
+            {
+                type: "input",
+                message: "Please enter the intern's school affiliation.",
+                name: "school",
+            },
+            {
+                type: "list",
+                message: "Would you like to add another teammate",
+                name: "teammate",
+                choices: [
+                    "Yes",
+                    "No",
+                ]
+
+            },
+        ]).then(intern => {
+            console.log(intern);
+
+            var interns = new Intern(intern.name, intern.id, intern.email, intern.github);
+
+            team.push(interns);
+            //based on their response switch between grabbing another employees info and generating the html. 
+            switch (intern.teammate) {
+
+                case "Yes":
+                    return promptMember();
+
+                default:
+                    return generateHTML();
+            }
+        })
+    };
+
+  function generateHTML(){
+    console.log(team);
+  };
 }
 formTeam()
 console.log(team);
