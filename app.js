@@ -109,6 +109,11 @@ function formTeam() {
             },
             {
                 type: "input",
+                message: "Please enter the manager's email.",
+                name: "email",
+            },
+            {
+                type: "input",
                 message: "Please enter the manager's office number.",
                 name: "office",
             },
@@ -161,6 +166,11 @@ function formTeam() {
                 type: "input",
                 message: "Please enter the engineer's id.",
                 name: "id",
+            },
+            {
+                type: "input",
+                message: "Please enter the manager's email.",
+                name: "email",
             },
             {
                 type: "input",
@@ -218,6 +228,11 @@ function formTeam() {
             },
             {
                 type: "input",
+                message: "Please enter the manager's email.",
+                name: "email",
+            },
+            {
+                type: "input",
                 message: "Please enter the intern's school affiliation.",
                 name: "school",
             },
@@ -234,7 +249,7 @@ function formTeam() {
         ]).then(intern => {
             console.log(intern);
 
-            var interns = new Intern(intern.name, intern.id, intern.email, intern.github);
+            var interns = new Intern(intern.name, intern.id, intern.email, intern.school);
 
             team.push(interns);
             //based on their response switch between grabbing another employees info and generating the html. 
