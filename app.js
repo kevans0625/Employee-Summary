@@ -2,6 +2,12 @@ const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
+const fs = require("fs");
+const util = require("util");
+
+  // The built-in util package can be used to create Promise-based versions of functions using node style callbacks
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
 
 //Gather information on the user...what role are they
 var team = [];
@@ -30,7 +36,8 @@ function formTeam() {
                     "Intern",
                     "Manager",
                     "Other employees"]
-            }]).then(function (res) {
+            }])
+            .then(function (res) {
                 //based on their response switch between functions to grab the proper employee function
                 console.log(res);
                 switch (res.type) {
@@ -65,7 +72,8 @@ function formTeam() {
                     "Manager",
                     "Other employees"
                 ]
-            }]).then(function (newres) {
+            }])
+            .then(function (newres) {
                 //based on their response switch between functions to grab the proper employee function
                 console.log(newres);
                 switch (newres.type) {
@@ -125,25 +133,20 @@ function formTeam() {
                     "Yes",
                     "No",
                 ]
-
             },
         ]).then(manager => {
             console.log(manager);
-
             var managers = new Manager(manager.name, manager.id, manager.email, manager.office);
-
             team.push(managers);
             //based on their response switch between grabbing another employees info and generating the html. 
             switch (manager.teammate) {
-
                 case "Yes":
                     return promptMember(manager.type);
-
                 default:
                     return generateHTML();
             }
         })
-        
+
 
     }
     // get Engineer info
@@ -263,10 +266,15 @@ function formTeam() {
             }
         })
     };
-
-  function generateHTML(){
+}
+function generateHTML() {
     console.log(team);
-  };
+    var mainFile = readFileAsync("./templates/main.html")
+    writeFileAsync("./outputs/index.html", mainFile, function (error) {
+        if (error) 
+            throw error;
+    })
+     console.log("Home page created!");
 }
 formTeam()
 console.log(team);
