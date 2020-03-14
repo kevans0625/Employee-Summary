@@ -1,9 +1,12 @@
+
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const fs = require("fs");
+const path = require("path");
 const util = require("util");
+const placeholder = require("json-placeholder-replacer");
 
   // The built-in util package can be used to create Promise-based versions of functions using node style callbacks
 const readFileAsync = util.promisify(fs.readFile);
@@ -15,16 +18,6 @@ var team = [];
 function formTeam() {
     function promptUser() {
         // prompt the questions to gather information about how many people are on the teams, each employee
-        // their email, id, and specific role based on
-        //  their role with the company. For instance, an intern may provide their school, whereas an engineer may provide their GitHub username.
-        // 
-        // * Name
-
-        //     * Role
-
-        //     * ID
-
-        //     * Role - specific property
 
         return inquirer.prompt([
             {
@@ -35,8 +28,10 @@ function formTeam() {
                     "Engineer",
                     "Intern",
                     "Manager",
-                    "Other employees"]
-            }])
+                    "Other employees"
+                ]
+            }
+        ])
             .then(function (res) {
                 //based on their response switch between functions to grab the proper employee function
                 console.log(res);
@@ -93,7 +88,17 @@ function formTeam() {
             })
 
     };
-    // get Manager info
+    // get Manager info  // their email, id, and specific role based on
+        //  their role with the company. For instance, an intern may provide their school, whereas an engineer may provide their GitHub username.
+        // 
+        // * Name
+
+        //     * Role
+
+        //     * ID
+
+        //     * Role - specific property
+
     function promptManager() {
         // prompt manager 
         // * Name
@@ -136,7 +141,7 @@ function formTeam() {
             },
         ]).then(manager => {
             console.log(manager);
-            var managers = new Manager(manager.name, manager.id, manager.email, manager.office);
+            var managers = new Manager("manager", manager.name, manager.id, manager.email, manager.office);
             team.push(managers);
             //based on their response switch between grabbing another employees info and generating the html. 
             switch (manager.teammate) {
@@ -151,14 +156,6 @@ function formTeam() {
     }
     // get Engineer info
     function promptEngineer() {
-        // * Name
-
-        //     * Role
-
-        //     * ID
-
-        //     * Role - specific property
-
         return inquirer.prompt([
             {
                 type: "input",
@@ -172,7 +169,7 @@ function formTeam() {
             },
             {
                 type: "input",
-                message: "Please enter the manager's email.",
+                message: "Please enter the engineer's email.",
                 name: "email",
             },
             {
@@ -182,7 +179,7 @@ function formTeam() {
             },
             {
                 type: "list",
-                message: "Would you like to add another teammate",
+                message: "Would you like to add another teammate?",
                 name: "teammate",
                 choices: [
                     "Yes",
@@ -193,7 +190,7 @@ function formTeam() {
         ]).then(engineer => {
             console.log(engineer);
 
-            var engineers = new Engineer(engineer.name, engineer.id, engineer.email, engineer.github);
+            var engineers = new Engineer("engineer",engineer.name, engineer.id, engineer.email, engineer.github);
 
             team.push(engineers);
             //based on their response switch between grabbing another employees info and generating the html. 
@@ -231,12 +228,12 @@ function formTeam() {
             },
             {
                 type: "input",
-                message: "Please enter the manager's email.",
+                message: "Please enter the intern's email.",
                 name: "email",
             },
             {
                 type: "input",
-                message: "Please enter the intern's school affiliation.",
+                message: "Please enter the intern's affiliated school.",
                 name: "school",
             },
             {
@@ -252,7 +249,7 @@ function formTeam() {
         ]).then(intern => {
             console.log(intern);
 
-            var interns = new Intern(intern.name, intern.id, intern.email, intern.school);
+            var interns = new Intern("intern", intern.name, intern.id, intern.email, intern.school);
 
             team.push(interns);
             //based on their response switch between grabbing another employees info and generating the html. 
@@ -267,15 +264,48 @@ function formTeam() {
         })
     };
 }
+
+
+function init() {
+    //             console.log(team);
+    
+    
+                    for (let i = 0; i < team.length; i++) {
+                        switch (team[i].position) {
+                            case  "manager": 
+                            //createCard(team[i].postition, team[i].name, team[i].id, team[i].email, "Office Number: " + team[i].officeNumber,);
+                            let htmlFile = fs.readFileSync(path.join(__dirname, "./templates/manager.html"), "utf8") 
+
+                              fs.appendFile('./templates/main.html', htmlFile, function (err) {
+                                    if (err) throw err;
+                                    console.log('Saved!');
+                                })
+    
+                    //  case "Engineer":
+                    //         createCard(team[i].postition, team[i].name, team[i].id, team[i].email, "Github: " + team[i].github);
+                    // case "Intern":
+                    //         createCard(team[i].postition, team[i].name, team[i].id, team[i].email, "School: " + team[i].school);
+    
+                        }
+                         
+                    }
+                }
+
+
 function generateHTML() {
     console.log(team);
+    console.log(team[0].email);
+    init()
     var mainFile = readFileAsync("./templates/main.html")
-    writeFileAsync("./outputs/index.html", mainFile, function (error) {
-        if (error) 
-            throw error;
+    writeFileAsync("./outputs/index.html", mainFile, function (err) {
+        if (err) 
+            throw err;
     })
      console.log("Home page created!");
+    
 }
 formTeam()
-console.log(team);
+console.log(team[0]);
+
+    console.log(team);
 
